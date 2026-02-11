@@ -1,0 +1,71 @@
+:root {
+  --accent: #ffd36e;
+  --border: #d4d4d4;
+}
+
+body {
+  font-family: "IBM Plex Mono", monospace !important;
+  color: #0c0c0c;
+}
+
+/* Dark */
+html.dark body {
+  color: #e5e5e5;
+  background: #010409;
+}
+
+/* Typography */
+h1, h2, h3 {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
+/* Divider */
+hr {
+  border: none;
+  border-top: 2px dotted var(--border);
+  margin: 2rem 0;
+}
+html.dark hr {
+  border-top-color: rgba(255,211,110,.6);
+}
+
+/* Links */
+a {
+  color: inherit;
+}
+a:hover {
+  color: var(--accent);
+}
+
+/* Cards */
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+}
+html.dark .card {
+  background: #0f0f18;
+  border: 1px solid #2c2c3a;
+}
+
+/* Smooth */
+* {
+  transition: color .2s ease, background .2s ease, border .2s ease;
+}
+
+.post-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+html.dark .post-link {
+  text-decoration-color: var(--accent);
+}
+
+.post-link:hover {
+  color: var(--accent);
+}

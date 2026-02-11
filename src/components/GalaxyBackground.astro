@@ -1,0 +1,152 @@
+---
+// src/components/GalaxyBackground.astro
+---
+<div id="galaxy-container" class="fixed inset-0 -z-10 bg-[#010409] hidden dark:block"></div>
+
+<script>
+  import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
+
+  const vertexShader = `
+    attribute vec2 uv;
+    attribute vec2 position;
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 0, 1);
+    }
+  `;
+
+  const fragmentShader = `
+    precision highp float;
+    uniform float uTime;
+    uniform vec3 uResolution;
+    uniform float uStarSpeed;
+    uniform float uDensity;
+    uniform float uGlowIntensity;
+    uniform float uTwinkleIntensity;
+    uniform float uRotationSpeed;
+    varying vec2 vUv;
+
+    #define NUM_LAYERS 4.0
+
+    float Hash21(vec2 p) {
+      p = fract(p * vec2(123.34, 456.21));
+      p += dot(p, p + 45.32);
+      return fract(p.x * p.y);
+    }
+
+    float Star(vec2 uv, float glow) {
+      float d = length(uv);
+      // Clean star point with controlled glow
+      float m = (0.01 * glow) / d;
+      m += smoothstep(0.02, 0.0, d) * 1.2; 
+      return m;
+    }
+
+    void main() {
+      vec2 uv = (vUv * uResolution.xy - 0.5 * uResolution.xy) / uResolution.y;
+      
+      // Gentle Auto Rotation
+      float a = uTime * uRotationSpeed;
+      mat2 rot = mat2(cos(a), -sin(a), sin(a), cos(a));
+      uv *= rot;
+
+      vec3 col = vec3(0.0);
+
+      for (float i = 0.0; i < 1.0; i += 1.0 / NUM_LAYERS) {
+        float depth = fract(i + uStarSpeed);
+        // Reduced scaling multiplier to keep stars smaller and more spread out
+        float scale = mix(15.0, 0.5, depth) * uDensity;
+        float fade = depth * smoothstep(1.0, 0.8, depth);
+        
+        vec2 gv = fract(uv * scale + i * 453.2) - 0.5;
+        vec2 id = floor(uv * scale + i * 453.2);
+        float n = Hash21(id);
+        
+        float size = fract(n * 345.32);
+        // Twinkle logic
+        float twinkle = sin(uTime * 2.5 + n * 6.28) * 0.5 + 0.5;
+        twinkle = mix(1.0, twinkle, uTwinkleIntensity);
+        
+        col += Star(gv, uGlowIntensity) * size * fade * twinkle;
+      }
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  const container = document.getElementById('galaxy-container');
+  if (container) {
+    const renderer = new Renderer({ alpha: true });
+    const gl = renderer.gl;
+    container.appendChild(gl.canvas);
+
+    const geometry = new Triangle(gl);
+    const program = new Program(gl, {
+      vertex: vertexShader,
+      fragment: fragmentShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uResolution: { value: new Color() },
+        uStarSpeed: { value: 0.02 },        
+        uDensity: { value: 0.85 },           // Reduced star count
+        uGlowIntensity: { value: 0.4 },      // Subtle glow
+        uRotationSpeed: { value: 0.01 },     // Slower rotation for cleaner feel
+        uTwinkleIntensity: { value: 0.5 }
+      }
+    });
+
+    const mesh = new Mesh(gl, { geometry, program });
+
+    function resize() {
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
+      program.uniforms.uResolution.value.set(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function update(t) {
+      if (getComputedStyle(container).display === 'none') {
+        requestAnimationFrame(update);
+        return;
+      }
+      requestAnimationFrame(update);
+      const time = t * 0.001;
+      program.uniforms.uTime.value = time;
+      program.uniforms.uStarSpeed.value = (time * 0.015); 
+      renderer.render({ scene: mesh });
+    }
+    requestAnimationFrame(update);
+  }
+</script>
+
+<style is:global>
+  /* LIGHT MODE: Reset text to dark and remove dark-mode artifacts */
+  :root {
+    color: #111827; 
+  }
+
+  /* DARK MODE: Default text color */
+  .dark {
+    color: #f3f4f6;
+  }
+
+  /* Force light mode styles to be clean when .dark class is missing */
+  html:not(.dark) * {
+    text-shadow: none !important;
+    color: #111827 !important;
+    background-color: transparent !important; /* Ensure no white glows behind text */
+  }
+
+  /* Handle link visibility specifically for light mode */
+  html:not(.dark) a {
+    color: #000000 !important;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

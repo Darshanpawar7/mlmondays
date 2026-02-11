@@ -1,0 +1,16 @@
+---
+const { post } = Astro.props;
+---
+<article class="card">
+  <a href={`/posts/${post.slug}`}>
+    <h3 class="text-xl font-semibold mb-1">{post.title}</h3>
+
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+      {post.description}
+    </p>
+
+    <p class="text-xs text-gray-500 dark:text-gray-400">
+      {post.date} • {post.est_read || "5"} min read
+    </p>
+  </a>
+</article>

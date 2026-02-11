@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GalaxyBackground from "../components/GalaxyBackground.astro";
+
+const date = "Aug 1, 2025";
+const readTime = "1 min read";
+---
+
+<BaseLayout title="Ethos — ML Mondays">
+  <GalaxyBackground />
+
+  <div class="relative z-10 max-w-4xl mx-auto pt-10 pb-20 px-4">
+    <div class="text-center mb-16"> <h2 class="text-[10px] uppercase tracking-[0.5em] font-mono mb-4 text-yellow-600 dark:text-yellow-500">Our Manifesto</h2>
+      <h1 class="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-6 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-600 dark:from-white dark:to-gray-400 no-underline select-none">
+        Ethos
+      </h1>
+      <div class="h-1 w-24 bg-yellow-500 mx-auto"></div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-12">
+      <div class="relative p-10 md:p-16 rounded-[3rem] border border-gray-100 dark:border-white/5 bg-white dark:bg-white/[0.02] shadow-2xl shadow-gray-200/50 dark:shadow-none overflow-hidden">
+        <div class="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none">
+           <svg class="w-32 h-32 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
+        </div>
+
+        <div class="relative z-10">
+          <p class="text-2xl md:text-3xl font-medium text-gray-800 dark:text-gray-100 mb-12 leading-tight">
+            ML Mondays is built on <span class="text-yellow-600 dark:text-yellow-500">curiosity</span>, <span class="text-yellow-600 dark:text-yellow-500">collaboration</span>, and <span class="text-yellow-600 dark:text-yellow-500">responsibility</span>.
+          </p>
+
+          <div class="prose prose-lg dark:prose-invert max-w-none">
+            <p class="text-lg opacity-70 dark:opacity-70 leading-relaxed mb-8">
+              We believe in learning by building, sharing knowledge openly, and
+              communicating ideas with clarity. Every post strives to be high-quality,
+              reproducible, and genuinely useful.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            {[
+              { title: "Quality Writing", desc: "Helpful, thoughtful, and meaningful content that respects the reader's time." },
+              { title: "Clarity", desc: "Work that can be understood, replicated, and built upon by anyone in the hive." },
+              { title: "Ethics", desc: "Awareness and responsibility in every line of code and every model trained." },
+              { title: "Community", desc: "Collaboration and mentorship over competition and gatekeeping." }
+            ].map(pill => (
+              <div class="flex items-start gap-4">
+                <div class="w-2 h-2 mt-2 rounded-full bg-yellow-500 shrink-0"></div>
+                <div>
+                  <h4 class="font-bold text-sm uppercase tracking-widest mb-1 text-gray-900 dark:text-gray-100">{pill.title}</h4>
+                  <p class="text-sm opacity-60 dark:opacity-60 line-height-relaxed text-gray-700 dark:text-gray-300">{pill.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center py-6"> <p class="text-sm font-mono uppercase tracking-[0.3em] opacity-40 dark:opacity-40 text-gray-600 dark:text-gray-400">Updated August 2025 • Neural Hive</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  h1, h2, h3, h4 {
+    text-decoration: none !important;
+  }
+
+  /* Force clean Light Mode styles */
+  html:not(.dark) body {
+    background-color: white !important;
+    color: #111827 !important;
+  }
+
+  html:not(.dark) .prose p, 
+  html:not(.dark) p, 
+  html:not(.dark) span:not(.text-yellow-600) {
+    color: #1f2937 !important;
+    text-shadow: none !important;
+  }
+
+  html:not(.dark) h1 {
+    background-image: linear-gradient(to right, #000, #4b5563) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+</style>
