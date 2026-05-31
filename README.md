@@ -11,7 +11,7 @@
 
 *Making complex concepts clear, meaningful, and inspiring — one Monday at a time.*
 
-[View Site](https://github.com/neuralhive-ec/mlmondays) | [Report Issue](https://github.com/neuralhive-ec/mlmondays/issues) | [Contribute](#-contributing)
+[View Site](https://mlmondays.vercel.app/) | [Report Issue](https://github.com/neuralhive-ec/mlmondays/issues) | [Contribute](#-contributing)
 
 </div>
 
